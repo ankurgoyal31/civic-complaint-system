@@ -61,24 +61,6 @@ const menu = [
 
     setInput("");
   };
-
-  // const getCategoryIcon = (category) => {
-  //   switch (category) {
-  //     case "Sanitation":
-  //       return "🧹";
-  //     case "Electricity":
-  //       return "💡";
-  //     case "Water Supply":
-  //       return "💧";
-  //     case "Road Maintenance":
-  //       return "🛣️";
-  //     case "Traffic":
-  //       return "🚦";
-  //     default:
-  //       return "📋";
-  //   }
-  // };
-
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":

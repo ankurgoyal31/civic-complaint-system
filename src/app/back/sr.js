@@ -53,7 +53,7 @@ async function startServer() {
         console.error("UPLOAD ERROR:", err);
         res.status(500).json({ error: "Server error" });
       }
-    });
+    }); 
 
      app.get("/users", async (req, res) => {
       const { email } = req.query;
