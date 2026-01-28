@@ -55,6 +55,11 @@ const[shk,ssh] = useState("")
         { name: 'May', value: 70 },
         { name: 'Jun', value: 65 },
     ];
+    console.log("ENV CHECK", {
+  id: process.env.GOOGLE_CLIENT_ID,
+  secret: process.env.GOOGLE_CLIENT_SECRET,
+  nextauth: process.env.NEXTAUTH_SECRET,
+});
 const menu = [
   { icon: '🏠', label: 'Dashboard', href: '/' },
   { icon: '📊', label: 'Message', href: '/ana' },
