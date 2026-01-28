@@ -1,16 +1,16 @@
+require("dotenv").config();
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const multer = require("multer");
 const cors = require("cors");
+// import { configDotenv } from "dotenv";
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(cors()); 
+app.use(express.json()); 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
- const client = new MongoClient(
-  "mongodb+srv://ankurgoyal1227_db_user:0fqu2Vnd81bkdyJV@emploee.ltat2dt.mongodb.net/emploee"
-);
+console.log("ENV VALUE:", process.env.MONGODB_URI);
+ const client = new MongoClient(process.env.MONGODB_URI);
 
 async function startServer() {
   try {
@@ -139,7 +139,7 @@ res.status(500).json([]);
      app.listen(5000, () =>
       console.log("Server running on http://localhost:5000")
     );
-  } catch (err) {
+   } catch (err) {
     console.error("SERVER START ERROR:", err);
   }
 }
