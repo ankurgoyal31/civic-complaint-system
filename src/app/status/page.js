@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from "react";
  import Link from "next/link";
-import Na from "../cf/na";
+// import Na from "../cf/na";
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -35,7 +35,7 @@ const menu = [
 ];
   const fetchUsers = async () => {
     if (session?.user?.email) {
-      const res = await fetch(`http://localhost:5000/users?email=${session?.user?.email}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
       const data = await res.json();
       setUsers(data);
       set(data);

@@ -21,7 +21,7 @@ import Link from 'next/link';
 
 const[p,m] = useState([]);
      const fetchUsers = async () => {
-                  const res = await fetch("http://localhost:5000/adm");
+                  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
                       const data = await res.json();
                      console.log("data - > " +data);
                      setUsers(data)
@@ -145,7 +145,7 @@ const get = (e,i)=>{
 }
 const menu = [
   { icon: '🏠', label: 'Dashboard', href: '/admin' },
-  { icon: '📊', label: 'Analytics', href: '/' },
+  { icon: '📊', label: 'Analytics', href: '/admin' },
   { icon: '📋', label: 'All Complaints', href: '/adcom' },
   { icon: '🔔', label: 'Report', href: '/report' },
   // { icon: '📈', label: 'Status', href: '/status' },

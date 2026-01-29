@@ -78,7 +78,7 @@ const menu = [
         if (session?.user?.email) {
             console.log("Fetching users...")
             console.log(session?.user?.email)
-            const res = await fetch(`http://localhost:5000/users?email=${session?.user?.email}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
             const data = await res.json();
             if(!data.length){
                 ssh("Not found Any Report....")

@@ -41,10 +41,10 @@ const Page = () => {
   { icon: '👤', label: 'Profile', href: '/adp' },
 ];
     const fetchUsers = async () => {
-        const res = await fetch("http://localhost:5000/adm");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
         const data = await res.json();
         setUsers(data)
-        const re = await fetch("http://localhost:5000/use");
+        const re = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/use`);
         const dat = await re.json();
         k(dat)
         console.log(dat);

@@ -30,9 +30,9 @@ const [openSidebar, setOpenSidebar] = useState(false);
   const fetchUsers = async () => {
     try {
       const [admRes, useRes,am] = await Promise.all([
-        fetch("http://localhost:5000/adm"),
-        fetch("http://localhost:5000/use"),
-        fetch("http://localhost:5000/am"),
+        fetch(`${process.env.BACKEND}/adm`),
+        fetch(`${process.env.BACKEND}/use`),
+        fetch(`${process.env.BACKEND}/am`),
       ]);
       
       const admData = await admRes.json();
@@ -149,7 +149,7 @@ console.log(selectedMessage.id)
    formData.append("_id",selectedMessage.id);
   formData.append("noti",replyText);
 
-   const res = await fetch("http://localhost:5000/load", {
+   const res = await fetch(`${process.env.BACKEND}/load`, {
     method: "POST",
     body: formData
   });
@@ -161,7 +161,7 @@ console.log(selectedMessage.id)
    form.append("id",selectedMessage.id);
   form.append("resp",replyText);
   form.append("branch","sarmathura");
-  const re = await fetch("http://localhost:5000/admin", {
+  const re = await fetch(`${process.env.BACKEND}/admin`, {
     method: "POST",
     body: form
   });

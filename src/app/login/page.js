@@ -17,8 +17,7 @@ const Page = () => {
     n(true);
   };
 
-  // 🔥 LOGIN SUCCESS POPUP + REDIRECT
-  useEffect(() => {
+   useEffect(() => {
     if (status === "authenticated") {
       setShowPopup(true);
 
@@ -35,9 +34,7 @@ const Page = () => {
 
   return (
     <>
-      {/* {!session && <Nav />} */}
-
-      {/* ===== POPUP ===== */}
+       
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup-card">
@@ -49,13 +46,11 @@ const Page = () => {
         </div>
       )}
 
-      {/* ===== LOGIN PAGE ===== */}
-      {!session && (
+       {!session && (
         <div className="login-page">
           <div className="login-card">
 
-            {/* 🔥 CSS ANIMATION BACKGROUND */}
-            <div className="css-anim-bg">
+             <div className="css-anim-bg">
               <span></span>
               <span></span>
               <span></span>
@@ -103,8 +98,7 @@ const Page = () => {
         </div>
       )}
 
-      {/* ================= CSS ================= */}
-      <style jsx>{`
+       <style jsx>{`
         /* ===== PAGE ===== */
         .login-page {
           min-height: 100vh;

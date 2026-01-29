@@ -36,7 +36,7 @@ async function startServer() {
             if (file) {
               updateData.image = file.buffer.toString("base64");
             }
-
+ 
             await User.updateOne({ _id: new ObjectId(_id) }, { $set: updateData });
             return res.json({ success: true, updated: true });
           }
@@ -136,12 +136,12 @@ let data = await msg.find({email:req.body.email}).toArray();
 res.status(500).json([]);
   }
 })
-     app.listen(5000, () =>
-      console.log("Server running on http://localhost:5000")
+     app.listen(`${process.env.NEXT_PUBLIC_BACKEND}`|| 5000, () =>
+      console.log(`Server running on ${process.env.NEXT_PUBLIC_BACKEND}`)
     );
    } catch (err) {
     console.error("SERVER START ERROR:", err);
   }
 }
 
-startServer();
+startServer(); 

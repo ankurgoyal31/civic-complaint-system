@@ -49,7 +49,7 @@ const save = async()=>{
     formData.append("userName",session?.user?.name);
     formData.append("branch",form.branch);
   formData.append("img",session?.user?.image);
-  let res = await fetch("http://localhost:5000/create",{
+  let res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/create`,{
     method:"POST",
     body:formData
   })

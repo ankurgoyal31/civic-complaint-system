@@ -21,7 +21,7 @@ const Page = () => {
   const [scrolled, setScrolled] = useState(false);
   
   const fetchUsers = async () => {
-    const res = await fetch("http://localhost:5000/adm");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
     const data = await res.json();
     console.log(data);
     setUsers(data)

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Na from "../cf/na";
+// import Na from "../cf/na";
 import Nav from "../cp/nav";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -18,7 +18,7 @@ const Page = () => {
   const fetchUsers = async () => {
     if (status === "authenticated" && session?.user?.email) {
       const res = await fetch(
-        `http://localhost:5000/users?email=${session?.user?.email}`
+        `${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`
       );
       const data = await res.json();
       console.log(data);
@@ -54,7 +54,7 @@ alert("fuck")
     <>
       {/* Top Component */}
       <div>
-        <Na />
+        {/* <Na /> */}
       </div>
 
       {/* Navbar */}
