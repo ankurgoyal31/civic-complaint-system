@@ -1,7 +1,6 @@
 "use client"
 import React from 'react'
-// import Na from "../cf/na";
-import { useEffect,useState } from 'react'
+ import { useEffect,useState } from 'react'
 import Carousel from 'react-bootstrap/Carousel';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
@@ -16,8 +15,7 @@ import { BarChart, Bar } from "recharts";
 import Link from 'next/link';
 import Table from 'react-bootstrap/Table';
 import { useRouter } from 'next/navigation';
-import { startSession } from 'mongoose';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+ import { Card, Button, Row, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';

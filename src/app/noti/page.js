@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { startSession } from 'mongoose';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+ import { Card, Button, Row, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
@@ -29,7 +28,7 @@ const handleSearch = (e) => {
           const handleScroll = () => {
               setScrolled(window.scrollY > 0);
           };
-          
+
           window.addEventListener("scroll", handleScroll);
       }, []);
   
