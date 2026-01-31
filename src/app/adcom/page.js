@@ -9,8 +9,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Pagination from 'react-bootstrap/Pagination';
 import { useRouter } from 'next/navigation';
+import Adnav from '../../../adnvav/nav';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
  const page = () => {
+  const{data:session} = useSession();
          const router = useRouter();5
    const [users, setUsers] = useState([]);
    const [us, setUs] = useState();
@@ -18,26 +21,34 @@ import Link from 'next/link';
      const [scrolled, setScrolled] = useState(false);
      const [search, setSearch] = useState("");
      const [se, set] = useState([0,12]);
-
+const[l,ls]=useState("");
 const[p,m] = useState([]);
      const fetchUsers = async () => {
+      ls("data is loading please wait...")
+      try{ 
                   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
                       const data = await res.json();
                      console.log("data - > " +data);
+                          if(data.length){
+                            ls("")
+                          }
+ 
                      setUsers(data)
+                     
                        const sorted = data.sort(
       (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
     );
-// sets(sorted.slice(0, 8));
-            setUsers(sorted.slice(0,12));
+             setUsers(sorted.slice(0,12));
                      m(sorted)
+  }catch(err){
+    ls("please check your internet connection....")
+  }
                  };
 
                  useEffect(() => {
                    fetchUsers();
                  }, []);
-    //   console.log(users)
- useEffect(() => {
+  useEffect(() => {
     const counts = users.reduce((acc, item) => {
   acc[item.complaint] = (acc[item.complaint] || 0) + 1;
   return acc;
@@ -66,23 +77,14 @@ temp.push(v)
 
    }
 }
-  //  console.log(temp)
-   Us(temp)
+    Us(temp)
         }, [users]);
       console.log(s);
       
       const nc = (e,i)=>{
      console.log(i)
      setUsers(p.slice(i*12,i*12+12))
-
-//      if(search==""){
-//   setUsers(p)
-// }
-
-// useEffect(() => {
-//  sea() 
-//  console.log("call")
-// }, [search])
+rs(p)
 set([i*12,i*12+12])
       }
  const sea = ()=>{
@@ -100,8 +102,7 @@ set([i*12,i*12+12])
     item._id?.toLowerCase().includes(searchText) 
   );
 });
-// console.log("filter",filteredUsers)
-setUsers(filteredUsers)
+ setUsers(filteredUsers)
 console.log(search)
 }
 const handleSearch = (e) => {
@@ -148,21 +149,31 @@ const menu = [
   { icon: '📊', label: 'Analytics', href: '/admin' },
   { icon: '📋', label: 'All Complaints', href: '/adcom' },
   { icon: '🔔', label: 'Report', href: '/report' },
-  // { icon: '📈', label: 'Status', href: '/status' },
-  { icon: '💬', label: 'Notification', href: '/notia' },
-//   { icon: '👷', label: 'Workers', href: '/workers' },
-  { icon: '👤', label: 'Profile', href: '/adp' },
+   { icon: '💬', label: 'Notification', href: '/notia' },
+   { icon: '👤', label: 'Profile', href: '/adp' },
 ];
    return (
     <>
+          {l!=="" && <><div className="prirfn13">{l}</div></>}
 
  <Navbar  className={scrolled ? " scrolled" : "navbar"} fixed="top" expand="lg">
       <Container fluid>
-        {/* Brand with animation */}
-        <Navbar.Brand href="#" className="brand-animate">
+         <Navbar.Brand href="#" className="brand-animate">
           🚀 Civic Dashboard
         </Navbar.Brand>
+<Form   className="d-flex search-animate">
+            <Form.Control
+              type="search"
+              placeholder="Search...,Name,Branch,location,comlaint,status"
+              className="me-2"
+              aria-label="Search"
+              value={search}
+               onChange={handleSearch}
+            />
+            <Button onClick={sea} className='bt2' variant="outline-light">🔍</Button>
+            <Button className='bt1'>Sign Out</Button>
 
+          </Form>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0 nav-links" navbarScroll>
@@ -178,35 +189,35 @@ const menu = [
               Disabled
             </Nav.Link>
           </Nav>
-
-          {/* Animated Search */}
-          <Form   className="d-flex search-animate">
-            <Form.Control
-              type="search"
-              placeholder="Search...,Name,Branch,location,comlaint,status"
-              className="me-2"
-              aria-label="Search"
-              value={search}
-               onChange={handleSearch}
-            />
-            <Button onClick={sea} className='bt2' variant="outline-light">🔍</Button>
-            <Button className='bt1'>Sign Out</Button>
-
-          </Form>
+                   <div className='center35'>
+                      <Link href={"/admin"} className="sidebar-link">🏠 Dashboard</Link> 
+                      <Link href={"/notia"} className="sidebar-link">📊 Notification</Link> 
+                      <Link href={"/report"} className="sidebar-link">📋 Report</Link> 
+                      <Link href={"/adcom"} className="sidebar-link">All Complaints</Link> 
+                      <Link href={"/status"} className="sidebar-link">📈 Status</Link> 
+                      <Link href={"/adp"} className="sidebar-link">👤 Profile</Link>
+   {session && <div className="sidebar-footer">
+                        <Button style={{width:"200px"}} onClick={() => signOut({ callbackUrl: "/" })} className="premium-signout-sidebar">🚪 Sign Out</Button>
+                        </div>}
+                             </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>
 
+ 
 
-
-
- <div style={{marginTop:100}} className="premium-sidebar">
-                    <div className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
+ <div  className='premium3'>
+    {/* {session && <div className='bacg'><span><img src={session?.user?.image} alt="" className='img4' /></span> <span className="search-container454">{session?.user.email}</span> </div>} */}
+</div>
+      <div className="premium-main-content">
+                 <div className="premium-sidebar">
+                     <div className="sidebar-header">
+                         <div className="sidebar-glow"></div>
+                         {/* <h1>navigation</h1> */}
                     </div>
-                    
-                       <nav className="sidebar-nav">
+                   
+
+                    <nav className="sidebar-nav">
                      
 
   {menu.map((item, index) => (
@@ -217,15 +228,13 @@ const menu = [
     </Link>
   ))}
 </nav>
+    {session && <div className="sidebar-footer">
+                        <Button  onClick={() => signOut({ callbackUrl: "/" })} className="premium-signout-sidebar">🚪 Sign Out</Button>
+                        </div>}
+{!session && <div><Link href="/login/" >  <Button className="premium-signout-sidebar">🚪 SignIn</Button></Link> </div>}
 
-                    
-                    <div className="sidebar-footer">
-                        <Button className="premium-signout-sidebar">🚪 Sign Out</Button>
-                    </div>
                 </div>
-
-
-
+</div>
 
     <div style={{marginTop:'80px'}} className='ep1'> 
            <div className='c1'>

@@ -7,58 +7,56 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 import { signIn, signOut, useSession } from 'next-auth/react';
-
+import Srtr from "../sidev/srtr";
+import { useState,useEffect } from "react";
 const ProfilePage = () => {
   const { data: session } = useSession();
+  const[load,sl]  = useState("");
+   const[p,sp] = useState(0);
+      const[pr,spr] = useState(0);
+      const[r,sr] = useState(0);
 const menu = [
   { icon: '🏠', label: 'Dashboard', href: '/' },
   { icon: '📊', label: 'Message', href: '/ana' },
   { icon: '📋', label: 'Complaint', href: '/compl' },
   { icon: '🔔', label: 'Report', href: '/rc' },
   { icon: '📈', label: 'Status', href: '/status' },
-//   { icon: '💬', label: 'Messages', href: '/messages' },
-//   { icon: '👷', label: 'Workers', href: '/workers' },
   { icon: '👤', label: 'Profile', href: '/profile' },
-];
+]
+
+ async function fet() {
+  sl("loading your data....")
+              const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
+const data = await res.json();
+if(!data.length){
+  sl("Not found....")
+  return;
+}
+ let fil = data.filter((item)=>item.status==="Pending");
+            console.log(fil.length)
+            sp(fil.length)
+                let fil1 = data.filter((item)=>item.status==="In Progress");
+            console.log(fil1.length)
+            spr(fil1.length)
+                let fil2 = data.filter((item)=>item.status==="Resolved");
+            console.log(fil2.length)
+            sr(fil2.length)
+            sl("");
+}
+useEffect(() => {
+  fet()
+}, [session?.user.email])
+
   return (
     <>
 
 <div style={{marginTop:'100'}}  className="premium-main-content">
-                {/* Premium Sidebar */}
-                <div  className="premium-sidebar">
-                    <div  className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
-                    </div>
-                   
-
-                    <nav className="sidebar-nav">
-                     
-
-  {menu.map((item, index) => (
-    <Link key={index} href={item.href} className="sidebar-link">
-      <span className="link-icon">{item.icon}</span>
-      <span className="link-text">{item.label}</span>
-      <div className="link-glow"></div>
-    </Link>
-  ))}
-</nav>
-
-                    
-                  {session && <div className="sidebar-footer">
-                        <Button  onClick={signOut({ callbackUrl: "/" })} className="premium-signout-sidebar">🚪 Sign Out</Button>
-                        </div>}
- {!session && <div className="sidebar-footer">
-                      <Link href="/login/" >  <Button className="premium-signout-sidebar">🚪 SignIn</Button></Link> 
-                        </div>}
- 
- </div>
+<Srtr/>
                 </div>
 
 
       <div className="profile-page">
-        {/* ===== HEADER ===== */}
-        <div className="profile-header">
+         <div className="profile-header">
           <img
             src={session?.user?.image || "/avatar.png"}
             alt="profile"
@@ -70,8 +68,7 @@ const menu = [
           </div>
         </div>
 
-        {/* ===== MAIN CARD ===== */}
-        <div className="profile-card">
+         <div className="profile-card">
           <div className="info-grid">
             <div>
               <label>Name</label>
@@ -102,18 +99,19 @@ const menu = [
             </div>
           </div>
 
+{load!=="" && <><div>{load}</div></>}
           {/* ===== STATS ===== */}
           <div className="stats">
             <div>
-              <h3>12</h3>
-              <p>Total Complaints</p>
+              <h3>{pr}</h3>
+              <p>Progress</p>
             </div>
             <div>
-              <h3>7</h3>
+              <h3>{r}</h3>
               <p>Resolved</p>
             </div>
             <div>
-              <h3>5</h3>
+              <h3>{p}</h3>
               <p>Pending</p>
             </div>
           </div>

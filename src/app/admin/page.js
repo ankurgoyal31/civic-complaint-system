@@ -10,7 +10,9 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Srtr from '../sidev/srtr';
 import Link from 'next/link';
+ import Adnav from '../../../adnvav/nav';
 const Page = () => {
   const router = useRouter();
   const [uss, sets] = useState([]);
@@ -19,12 +21,35 @@ const Page = () => {
   const [us, setUs] = useState();
   const [isOpen, setisOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
+  const[l,sl] = useState("")
+ const[p,sp] = useState(0);
+    const[pr,spr] = useState(0);
+    const[r,sr] = useState(0);
+    const[t,st] = useState(0);
   const fetchUsers = async () => {
+    try{
+      sl("loading your content....")
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
     const data = await res.json();
     console.log(data);
     setUsers(data)
+    if(data.length){
+      st(data.length);
+       let fil = data.filter((item)=>item.status==="Pending");
+            console.log(fil.length)
+            sp(fil.length)
+                let fil1 = data.filter((item)=>item.status==="In Progress");
+            console.log(fil1.length)
+            spr(fil1.length)
+                let fil2 = data.filter((item)=>item.status==="Resolved");
+            console.log(fil2.length)
+            sr(fil2.length)
+sl("")
+    }
+
+    }catch(err){
+sl("check your internet connection....")
+    }
   };
   
   useEffect(() => {
@@ -35,10 +60,8 @@ const Page = () => {
   { icon: '📊', label: 'Analytics', href: '/' },
   { icon: '📋', label: 'All Complaints', href: '/adcom' },
   { icon: '🔔', label: 'Report', href: '/report' },
-  // { icon: '📈', label: 'Status', href: '/status' },
-  { icon: '💬', label: 'Notification', href: '/notia' },
-//   { icon: '👷', label: 'Workers', href: '/workers' },
-  { icon: '👤', label: 'Profile', href: '/adp' },
+   { icon: '💬', label: 'Notification', href: '/notia' },
+   { icon: '👤', label: 'Profile', href: '/adp' },
 ];
   useEffect(() => {
     const counts = users.reduce((acc, item) => {
@@ -106,69 +129,10 @@ const Page = () => {
 
   return (
     <div className="super-dashboard">
-      {/* Ultra Modern Navbar */}
-           <Navbar style={{color:'white'}}  className={scrolled ? " scrolled" : "navbar"} fixed="top" expand="lg">
-      <Container style={{color:'white'}} fluid>
-        {/* Brand with animation */}
-        <Navbar.Brand style={{color:'white'}} href="#" className="brand-animate">
-          🚀 Civic Dashboard
-        </Navbar.Brand>
-
-        <Navbar.Toggle style={{color:'white'}} aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav style={{color:'white'}} className="me-auto my-2 my-lg-0 nav-links" navbarScroll>
-          </Nav>
-
-          {/* Animated Search */}
-          <Form   className="d-flex search-animate">
-            <Form.Control
-              type="search"
-              placeholder="Search...,Name,Branch,location,comlaint,status"
-              className="me-2"
-              aria-label="Search"
-              />
-            <Button   className='bt2' variant="outline-light">🔍</Button>
-            <Button className='bt1'>Sign Out</Button>
-
-          </Form>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-
-
-
-
-
-
-   <div className="premium-sidebar">
-                    <div className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
-                    </div>
-                    
-                       <nav className="sidebar-nav">
-                     
-
-  {menu.map((item, index) => (
-    <Link key={index} href={item.href} className="sidebar-link">
-      <span className="link-icon">{item.icon}</span>
-      <span className="link-text">{item.label}</span>
-      <div className="link-glow"></div>
-    </Link>
-  ))}
-</nav>
-
-                    
-                    <div className="sidebar-footer">
-                        <Button className="premium-signout-sidebar">🚪 Sign Out</Button>
-                    </div>
-                </div>
-
-
-      {/* Main Content with Amazing Background */}
-      <div className="main-content-wrapper">
-        {/* Animated Background Elements */}
-        <div className="bg-animation">
+      
+<Adnav/>
+    <div className="main-content-wrapper">
+         <div className="bg-animation">
           <div className="floating-shapes">
             <div className="shape shape-1"></div>
             <div className="shape shape-2"></div>
@@ -183,7 +147,7 @@ const Page = () => {
             <div className="stat-content">
               <div className="stat-icon">📊</div>
               <h3>Total Complaints</h3>
-              <p className="stat-number">120</p>
+              <p className="stat-number">{t}</p>
               <div className="stat-glow"></div>
             </div>
           </div>
@@ -192,7 +156,7 @@ const Page = () => {
             <div className="stat-content">
               <div className="stat-icon">⏳</div>
               <h3>Pending</h3>
-              <p className="stat-number">45</p>
+              <p className="stat-number">{p}</p>
               <div className="stat-glow"></div>
             </div>
           </div>
@@ -201,7 +165,7 @@ const Page = () => {
             <div className="stat-content">
               <div className="stat-icon">🔄</div>
                <h3>In Progress</h3>
-              <p className="stat-number">32</p>
+              <p className="stat-number">{pr}</p>
               <div className="stat-glow"></div>
             </div>
           </div>
@@ -210,50 +174,19 @@ const Page = () => {
             <div className="stat-content">
               <div className="stat-icon">✅</div>
               <h3>Resolved</h3>
-              <p className="stat-number">43</p>
+              <p className="stat-number">{r}</p>
               <div className="stat-glow"></div>
             </div>
           </div>
         </div>
-
-        {/* Floating Quick Actions Menu */}
-        {/* <div className="super-quick-actions">
-          <button
-            onClick={() => setisOpen(!isOpen)}
-            className="super-menu-toggle"
-          >
-            <span className="menu-glow">⚡</span>
-            {isOpen ? "Close Menu" : "Quick Actions"}
-          </button>
-
-          <div className={`super-menu-box ${isOpen ? 'open' : ''}`}>
-            <div className="super-menu-item" onClick={() => {
-              const section = document.getElementById("analytics");
-              section.scrollIntoView({ behavior: "smooth" });
-            }}>
-              <span className="menu-icon">📈</span>
-              ANALYSIS
-            </div>
-            <div className="super-menu-item">
-              <span className="menu-icon">📤</span>
-              Sign Out
-            </div>
-            <div className="super-menu-item">
-              <span className="menu-icon">🚨</span>
-              Report
-            </div>
-          </div>
-        </div> */}
-
-        {/* Recent Complaints Section */}
-        <div className="super-recent-section">
+         <div className="super-recent-section">
           <div className="section-header-glow">
             <h2 className="section-title">🔥 LAST TIME COMPLAINTS</h2>
             <Button onClick={red} className="super-view-more-btn">
               👁️ View More
             </Button>
           </div>
-          
+          {l!=="" && <><div>{l}</div></>}
           <div className="super-complaints-grid">
             {uss.map((items, index) => (
               <div key={index} className="super-complaint-card" onClick={(e) => get(e, index)}>
@@ -536,12 +469,9 @@ width:300px;
         .main-content-wrapper {
           position: relative;
           z-index: 1;
-          padding: 200px ;
-          max-width: 2800px;
+           max-width: 2800px;
           margin: -100 auto;
-          // justify-self:end;
-        left:139px
-        }
+          }
 
         /* Super Stats Section */
         .super-stats-section {
@@ -1119,17 +1049,17 @@ width:300px;
 
  }
 
-//  .status-badge-glow {
-//   position: absolute;
-//   top: 15px;
-//   right: 15px;
-//   z-index: 3;
-//   padding: 8px 16px;
-//   border-radius: 20px;
-//   font-size: 12px;
-//   font-weight: 700;
-//   text-transform: uppercase;
-// }
+  .status-badge-glow {
+   position: absolute;
+   top: 15px;
+   right: 15px;
+   z-index: 3;
+   padding: 8px 16px;
+   border-radius: 20px;
+   font-size: 12px;
+   font-weight: 700;
+   text-transform: uppercase;
+ }
 
 
       `}</style>

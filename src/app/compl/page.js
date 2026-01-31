@@ -14,6 +14,8 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { signIn, signOut, useSession } from 'next-auth/react';
+// import Link from 'next/link'
+import Srtr from '../sidev/srtr'
 export default function Page() {
   return (
     <Suspense fallback={<div style={{ color: 'white', padding: 20 }}>Loading...</div>}>
@@ -28,6 +30,7 @@ function ComplContent() {
      
   // const ind = parseInt(ite);
   const{data:session, status} = useSession()
+  const[load,sload]  = useState("");
    const [first, setfirst] = useState({name:"",event:"",time:"",image:null,location:"",mobile:"",des:"",color:""})
   const[m,n] = useState("")
   const[r,x] = useState(false)
@@ -80,6 +83,12 @@ const menu = [
 
 
   const cre = async (v) => {
+sload("")
+     if(first.location=="" || first.event=="" || first.name=="" ||first.des=="" ||first.time=="" || first.mobile=="" ){
+sload("filled the requres field..");
+return;
+    }
+        sload("your complaint is sending please wait don't close the page ...")
     console.log(v)
    const formData = new FormData();
   formData.append("image", first.image);   // file
@@ -93,19 +102,30 @@ const menu = [
     formData.append("img",session.user?.image)
       formData.append("mobile", first.mobile);
       formData.append("_id", v);
-
-          alert("fuck")
       if(ind && users){
 console.log("fuck->>",users)
        }
+       try{
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/upload`, {
     method: "POST",
     body: formData
   });
+  if(!res.ok){
+sload("something went wrong ....")
+  }
   const data = await res.json();
+  console.log(res.ok)
   console.log(data);
+  sload("");
+  if(res.ok){
   alert("Uploaded successfully!");
+setfirst({name:"",event: "",time:"",image:"",location:"",mobile:"",des: "",color:""})
+  }
+  }catch(err){
+    sload("please Check Your internet connection....")
+  }
 };
+
   useEffect(() => {
     if(item  && users){
   console.log("-> ",ind)
@@ -118,66 +138,22 @@ setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.compla
 
   return (
     <>
-<Navbar className={`premium-navbar ${scrolled ? "scrolled" : ""}`} fixed="top" expand="lg">
-                <Container fluid>
-                    <Navbar.Brand href="#" className="premium-brand">
-                        <div className="brand-glow"></div>
-                        {/* 🚀 Civic Solutions */}
-                    </Navbar.Brand>
-
-                    <Navbar.Toggle aria-controls="navbarScroll" className="premium-toggle" />
-                    <Navbar.Collapse id="navbarScroll">
-                        <Nav className="me-auto my-2 my-lg-0 premium-nav-links" navbarScroll>
-                                                    </Nav>
-
-                             <div className="search-container">
-                                 {session?.user?.email}
-                                <span><img src={session?.user?.image} alt="" className='table-avatar' /></span>
-
-                             </div>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
- <div className="premium-main-content">
-                 <div className="premium-sidebar">
-                    <div className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
-                    </div>
-                   
-
-                    <nav className="sidebar-nav">
-                     
-
-  {menu.map((item, index) => (
-    <Link key={index} href={item.href} className="sidebar-link">
-      <span className="link-icon">{item.icon}</span>
-      <span className="link-text">{item.label}</span>
-      <div className="link-glow"></div>
-    </Link>
-  ))}
-</nav>
-
-                    
-                  {session && <div className="sidebar-footer">
-                        <Button  onClick={() => signOut({ callbackUrl: "/" })} className="premium-signout-sidebar">🚪 Sign Out</Button>
-                        </div>}
- {!session && <div className="sidebar-footer">
-                      <Link href="/login/" >  <Button className="premium-signout-sidebar">🚪 SignIn</Button></Link> 
-                        </div>}
- 
- 
-                </div>
+    <div className='display'> 
+    <div> 
+    {/* <Srtr/> */}
 </div>
 
+            <Srtr/>
 
      <div  className='x1'> 
       <div className='x2'> 
-          {session && <div className='s9'><img className='f3' src={session.user.image} alt="" /></div>}
+          {/* {session && <div className='s9'><img className='f3' src={session.user.image} alt="" /></div>} */}
           {session && <div className='s0'>welcome, {session.user.name}</div>}
  </div>
+   {load!=="" && <><div>{load}</div></>}
+
  <div className='p1'> 
-    <div><input name='name' value={first.name} onChange={hand} type="text" placeholder='ENTER PERSON NAME' /></div>
+     <div><input name='name' value={first.name} onChange={hand} type="text" placeholder='ENTER PERSON NAME' /></div>
     <div><input name='event' value={first.event} onChange={hand} type="text" placeholder='ENTER YOUR BRANCH' /></div>
     <div><input name='time' value={first.time} onChange={hand} type="text" placeholder='ENTER COMPLAIAINT' /></div>
       <div style={{backgroundColor:'brown',color:'black'}}><input type="file" accept="image/*" onChange={handleFile} /></div> 
@@ -185,14 +161,13 @@ setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.compla
         <div><input name='mobile' value={first.mobile} onChange={hand} type="text" placeholder='ENTER  MOBILE' /></div>
 
 <div><textarea name='des' value={first.des} onChange={hand} placeholder='ABOUT THE COMPLAINT'></textarea></div>
-    <div><input name='color' value={first.color} onChange={hand} type="text" placeholder='ENTER CARD COLOR' /></div>
-{/* <div className='p0' onClick={cre}><Link href='/dash/' style={{textDecoration:'none'}} >CREATE</Link> </div> */}
-{!item &&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}> CREATE </div>}
-{item &&<div onClick={()=>cre(users[ind]?._id)} className='p0' style={{backgroundColor:'red'}}>{users[ind]?._id} EDIT </div>}
-
+ {/* <div className='p0' onClick={cre}><Link href='/dash/' style={{textDecoration:'none'}} >CREATE</Link> </div> */}
+{!session&&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}><Link className='free' href={"/login"}> SignIn to create </Link></div> }
+{!item && session &&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}> CREATE </div>}
+{item && <div onClick={()=>cre(users[ind]?._id)} className='p0' style={{backgroundColor:'red'}}>{users[ind]?._id} EDIT </div>}
 </div>
 </div>
- 
+ </div>
      </>
   )
 }

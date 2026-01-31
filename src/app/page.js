@@ -21,6 +21,7 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Srtr from './sidev/srtr';
 // import { values } from 'lodash';
 // import { useSVGOverlay } from 'react-leaflet/lib/SVGOverlay';
 
@@ -39,11 +40,12 @@ const Page = () => {
     const[pr,spr] = useState(0);
     const[r,sr] = useState(0);
     const[grf,sgrf]  = useState([])
+    const [sidebarOpen, setSidebarOpen] = useState(false);
         const[brf,sbrf]  = useState([])
 const[shk,ssh] = useState("")
     useEffect(() => {
         fetchUsers();
-    }, [session])
+    }, [session?.user?.email])
 
     const data = [
         { name: 'Jan', value: 30 },
@@ -72,16 +74,17 @@ const menu = [
     const COLORS = ["#00e5ff", "#00ff8c", "#ff6b35"];
     
     const fetchUsers = async () => {
+        console.log("backend",process.env.NEXT_PUBLIC_BACKEND)
         ssh("Loading Your Data....")
         if (session?.user?.email) {
             console.log("Fetching users...")
             console.log(session?.user?.email)
             const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
             const data = await res.json();
-            if(!data.length){
+            if(!data.length){ 
                 ssh("Not found Any Report....")
                 return;
-            }
+            } 
             if(data.length){
                 ssh("");
             }
@@ -231,70 +234,11 @@ console.log("hello")
      }
 
     return (
-        <div className="premium-dashboard">
-
-            {/* Premium Navbar */}
-            <Navbar className={`premium-navbar ${scrolled ? "scrolled" : ""}`} fixed="top" expand="lg">
-                <Container fluid>
-                    <Navbar.Brand href="#" className="premium-brand">
-                        <div className="brand-glow"></div>
-                        🚀 Civic Solutions
-                    </Navbar.Brand>
-
-                    <Navbar.Toggle aria-controls="navbarScroll" className="premium-toggle" />
-                    <Navbar.Collapse id="navbarScroll">
-                        <Nav className="me-auto my-2 my-lg-0 premium-nav-links" navbarScroll>
-                        </Nav>
-
-                        
-                            <div className="search-container">
-                                
-                                 {session?.user?.email}
-                                <span><img src={session?.user?.image} alt="" className='table-avatar' /></span>
-
-                             </div>
-                           
-                           
- 
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-
+        <div className="premium-dashboard">  
              <div className="premium-main-content">
-                 <div className="premium-sidebar">
-                    <div className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
-                    </div>
-                   
-
-                    <nav className="sidebar-nav">
-                     
-
-  {menu.map((item, index) => (
-    <Link key={index} href={item.href} className="sidebar-link">
-      <span className="link-icon">{item.icon}</span>
-      <span className="link-text">{item.label}</span>
-      <div className="link-glow"></div>
-    </Link>
-  ))}
-</nav>
-
-                    
-                  {session && <div className="sidebar-footer">
-                        <Button  onClick={()=>signOut()} className="premium-signout-sidebar">🚪 Sign Out</Button>
-                        </div>}
- {!session && <div className="sidebar-footer">
-                      <Link href="/login/" >  <Button className="premium-signout-sidebar">🚪 SignIn</Button></Link> 
-                        </div>}
- 
- 
-                </div>
-
-                {/* Content Area */}
-                <div className="premium-content-area">
-                    {/* Hero Carousel */}
-                    <div className="premium-carousel-container">
+                <Srtr/>
+                 <div className="premium-content-area">
+                     <div className="premium-carousel-container">
                         <Slider {...settings} className="premium-slider">
                             {media.map((item, index) => (
                                 <div key={index} className="carousel-slide">
@@ -328,8 +272,7 @@ console.log("hello")
                         </Slider>
                     </div>
 
-                    {/* Stats Overview */}
-                    <div className="premium-stats-grid">
+                     <div className="premium-stats-grid">
                         {dta.map((item, index) => (
                             <div key={index} className="stat-card-premium">
                                 <div className="stat-glow"></div>
@@ -399,25 +342,6 @@ console.log("hello")
                         </div>
                     </div>
  
-                    {/* Quick Stats Cards */}
-                    {/* <div className="premium-quick-stats">
-                        {['Performance', 'Efficiency', 'Satisfaction', 'Growth'].map((title, index) => (
-                            <div key={index} className="quick-stat-card">
-                                <div className="stat-icon">📈</div>
-                                <h4>{title}</h4>
-                                <div className="stat-number">{85 + index * 5}%</div>
-                                <div className="stat-progress">
-                                    <div 
-                                        className="progress-bar" 
-                                        style={{width: `${85 + index * 5}%`}}
-                                    ></div>
-                                </div>
-                            </div>
-                        ))}
-                    </div> */}
-
-                    {/* Reports Section */}
- 
                     <div className="premium-reports-section">
                         <div className="section-header">
                             <h2>Your Complaint Reports</h2>
@@ -474,12 +398,10 @@ console.log("hello")
                                     ))}
                                 </tbody>
                             </Table>}
-                                                                                                                  {shk!=="" && <><div className="prirfn16" >{shk}</div></>}
+                 {shk!=="" && <><div className="prirfn16" >{shk}</div></>}
 
                         </div>
-                                
-                        {/* Pagination */}
-                            { shk=="" && <div className="premium-pagination">
+                                                { shk=="" && <div className="premium-pagination">
                             <Pagination>
                                 <Pagination.First onClick={des} className="pagination-btn" />
                                 {y.map((item, i) => (
@@ -725,8 +647,7 @@ console.log("hello")
                 /* Main Content Area */
                 .premium-main-content {
                     margin-left: 280px;
-                    padding: 100px 30px 30px;
-                }
+                 }
 
                 .premium-content-area {
                     max-width: 1400px;

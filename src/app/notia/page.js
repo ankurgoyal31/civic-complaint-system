@@ -1,20 +1,20 @@
 "use client"
 import { useState, useEffect } from 'react';
-// import { useRouter } from 'next/router';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+ import { Card, Button, Row, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useSession } from 'next-auth/react'
+import Srtr from '../sidev/srtr';
+import Adnav from '../../../adnvav/nav';
 import Link from 'next/link';
 export default function CivicMessageSystem() {
-    const{data:session} = useSession();
-//   const router = useRouter();
-  const [messages, setMessages] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [selectedMessage, setSelectedMessage] = useState(null);
+const{data:session} = useSession();
+const [messages, setMessages] = useState([]);
+const [unreadCount, setUnreadCount] = useState(0);
+const [selectedMessage, setSelectedMessage] = useState(null);
   const [replyText, setReplyText] = useState('');
   const [conversations, setConversations] = useState({});
   const [isMobile, setIsMobile] = useState(false);
@@ -30,11 +30,10 @@ const [openSidebar, setOpenSidebar] = useState(false);
   const fetchUsers = async () => {
     try {
       const [admRes, useRes,am] = await Promise.all([
-        fetch(`${process.env.BACKEND}/adm`),
-        fetch(`${process.env.BACKEND}/use`),
-        fetch(`${process.env.BACKEND}/am`),
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`),
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/use`),
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/am`),
       ]);
-      
       const admData = await admRes.json();
       const useData = await useRes.json();
         const userd = await am.json();
@@ -42,8 +41,7 @@ setfirst(userd);
       setUsers(admData);
       setNotifications(useData);
       
-      // Convert notifications to message format
-      const formattedMessages = useData.map((item, index) => ({
+       const formattedMessages = useData.map((item, index) => ({
         id: item.id || index,
         sender: item.name,
         content: `New complaint submitted - ${item.issue?.join(', ') || 'No details'}`,
@@ -86,16 +84,6 @@ setfirst(userd);
     const val = e.target.value;
     setSearch(val);
   }
-const menu = [
-  { icon: '🏠', label: 'Dashboard', href: '/admin' },
-  { icon: '📊', label: 'Analytics', href: '/' },
-  { icon: '📋', label: 'All Complaints', href: '/adcom' },
-  { icon: '🔔', label: 'Report', href: '/report' },
-  // { icon: '📈', label: 'Status', href: '/status' },
-  { icon: '💬', label: 'Notification', href: '/notia' },
-//   { icon: '👷', label: 'Workers', href: '/workers' },
-  { icon: '👤', label: 'Profile', href: '/adp' },
-];
   const markAsRead = (threadId) => {
     setMessages(messages.map(msg => 
       msg.threadId === threadId ? { ...msg, unread: false } : msg
@@ -143,45 +131,29 @@ const menu = [
     }));
 
 const formData = new FormData();
-console.log(selectedMessage.id)
-   formData.append("userEmail", session.user.email);
+console.log(selectedMessage.id,session?.user?.email)
+   formData.append("userEmail", session?.user?.email);
   formData.append("userName", session.user.name);
    formData.append("_id",selectedMessage.id);
   formData.append("noti",replyText);
 
-   const res = await fetch(`${process.env.BACKEND}/load`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/load`, {
     method: "POST",
     body: formData
   });
 
   const form = new FormData();
 console.log(selectedMessage.id)
-   form.append("userEmail", session.user.email);
+   form.append("userEmail", session?.user?.email);
   form.append("userName", session.user.name);
    form.append("id",selectedMessage.id);
   form.append("resp",replyText);
   form.append("branch","sarmathura");
-  const re = await fetch(`${process.env.BACKEND}/admin`, {
+  const re = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/admin`, {
     method: "POST",
     body: form
   });
     setReplyText('');
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      road: '#FF6B6B',
-      water: '#4ECDC4',
-      garbage: '#FFD166',
-      electricity: '#118AB2',
-      sewage: '#06D6A0',
-      lights: '#6A0572',
-      park: '#2EC4B6',
-      traffic: '#FF9F1C',
-      complaint: '#667eea',
-      reply: '#25D366'
-    };
-    return colors[category] || '#6C757D';
   };
 
   const getCurrentThreadMessages = () => {
@@ -192,81 +164,11 @@ console.log(selectedMessage.id)
 console.log(messages)
   return (
     <div className="container-fluid p-0 m-0" style={{ height: '100vh', overflow: 'hidden' }}>
-      {/* Navbar */}
-      <Navbar className={scrolled ? "scrolled" : "navbar"} fixed="top" expand="lg">
-         
-        <Container fluid>
-          <Navbar.Brand href="#" className="brand-animate">
-            🚀 Civic Dashboard
-            <Button
-  className="ms-2"
-  variant="outline-light"
-  onClick={() => setOpenSidebar(!openSidebar)} style={{backgroundColor:"blue"}}
->
-  ☰ 
-</Button>
-
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto my-2 my-lg-0 nav-links" navbarScroll>
-              {/* <Nav.Link href="#home" className="nav-animate">Home</Nav.Link>
-              <Nav.Link href="#features" className="nav-animate">Features</Nav.Link>
-              <NavDropdown title="More" id="navbarScrollingDropdown" className="nav-animate">
-                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">Something else here</NavDropdown.Item>
-              </NavDropdown> */}
-            </Nav>
-            <Form className="d-flex search-animate">
-              <Form.Control
-                type="search"
-                placeholder="Search...,Name,Branch,location,complaint,status"
-                className="me-2"
-                aria-label="Search"
-                value={search}
-                onChange={handleSearch}
-              />
-              <Button className='bt2 me-2' variant="outline-light">🔍</Button>
-              <Button className='bt1'>Sign Out</Button>
-            </Form>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-
-{openSidebar && <div style={{marginTop:100}} className="premium-sidebar">
-                    <div className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
-                    </div>
-                    
-                       <nav className="sidebar-nav">
-                     
-
-  { menu.map((item, index) => (
-    <Link key={index} href={item.href} className="sidebar-link">
-      <span className="link-icon">{item.icon}</span>
-      <span className="link-text">{item.label}</span>
-      <div className="link-glow"></div>
-    </Link>
-  ))}
-</nav>
-
-                    
-                    <div className="sidebar-footer">
-                        <Button className="premium-signout-sidebar">🚪 Sign Out</Button>
-                    </div>
-                </div>}
-
-
-
-      {/* Main Content - WhatsApp Style Layout */}
-      <div className="d-flex" style={{ height: '100vh', paddingTop: '76px' }}>
+      <Adnav/>
+              <div className="d-flex" style={{ height: '100vh', paddingTop: '76px' }}>
         
         {/* Left Sidebar - Contacts List */}
-        <div className="col-md-4 col-lg-3 border-end bg-light d-flex flex-column" style={{ height: '100%' }}>
+        <div className="col-md-4 col-lg-3 border-end bg-light d-flex flex-column" style={{marginTop:"0px", height: '100%' }}>
           <div className="p-3 border-bottom bg-white">
             <h4 style={{color:'black'}} className="mb-0">Complaints</h4>
             <small   className="text-muted">{messages.length} conversations</small>
@@ -338,8 +240,7 @@ console.log(messages)
                 </div>
               </div>
 
-              {/* Chat Messages */}
-              <div 
+               <div 
                 className="flex-grow-1 p-3 overflow-auto"
                 style={{ 
                   backgroundColor: '#f5f4f2ff',
@@ -395,8 +296,7 @@ console.log(messages)
                         >
                         </div>
                         <div 
-                        //   className={`rounded p-3 ${message.sender === 'You' ? 'bg-primary text-white' : 'bg-white'}`}
-                          style={{padding:'8px',maxWidth:'700px', fontSize: '25px',borderRadius:'5px', backgroundColor:'rgb(122, 122, 185)'}}
+                           style={{padding:'8px',maxWidth:'700px', fontSize: '25px',borderRadius:'5px', backgroundColor:'rgb(122, 122, 185)'}}
                         >
                          
                             <div> 
@@ -413,8 +313,7 @@ console.log(messages)
                   ))}
               </div>
 
-              {/* Reply Input */}
-              <div className="p-3 border-top bg-white">
+               <div className="p-3 border-top bg-white">
                 <div className="input-group">
                   <input
                     type="text"
@@ -435,8 +334,7 @@ console.log(messages)
               </div>
             </>
           ) : (
-            /* No Selection State */
-            <div className="d-flex align-items-center justify-content-center flex-grow-1 bg-light">
+             <div className="d-flex align-items-center justify-content-center flex-grow-1 bg-light">
               <div className="text-center">
                 <div className="display-1 text-muted mb-3">💬</div>
                 <h3 className="text-muted">Select a conversation</h3>
@@ -448,42 +346,120 @@ console.log(messages)
       </div>
 
       <style jsx>{`
-        .container-fluid {
-          font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-        
-        .cursor-pointer {
-          cursor: pointer;
-        }
-        
-        .bg-light {
-          background-color: #f9fafaff !important;
-        }
-        
-        .bg-white{
-          background-color: #f6f1f1ff !important;
-        }
-        .border-end {
-          border-right: 1px solid #dee2e6 !important;
-        }
-        .ms-2{
-                 background-color: #be7777ff !important;
- 
-        }
-        .overflow-auto {
-          overflow: auto;
-        }
-        
-        .flex-grow-1 {
-          flex-grow: 1;
-        }
-        .premium-sidebar{
-padding:70px
-font-size:60px;
-margin-top:100px;
-width:300px;
-right:10px
+ /* ===== ROOT FIX ===== */
+.container-fluid {
+  height: 100vh;
+  overflow: hidden;
 }
+
+/* ===== MAIN FLEX ===== */
+.main-chat-wrapper {
+  display: flex;
+  height: calc(100vh - 76px); /* navbar height */
+}
+
+/* ===== LEFT LIST ===== */
+.chat-list {
+  width: 320px;
+  background: #e5e7eb;
+  border-right: 1px solid #d1d5db;
+  overflow-y: auto;
+}
+body{
+  padding-top: 0px;
+}
+.chat-item {
+  padding: 12px;
+  cursor: pointer;
+  background: #c7ced6;
+  margin: 8px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.chat-item:hover {
+  background: #b6bec8;
+}
+
+.chat-item.active {
+  background: #9ca3af;
+  color: black;
+}
+
+/* ===== RIGHT CHAT ===== */
+.chat-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f9fafb;
+}
+
+/* HEADER */
+.chat-header {
+  padding: 12px;
+  background: white;
+  border-bottom: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* CHAT BODY */
+.chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* BUBBLES */
+.msg {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.msg.left {
+  background: white;
+}
+
+.msg.right {
+  background: #6366f1;
+  color: white;
+  margin-left: auto;
+}
+
+/* INPUT */
+.chat-input {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  background: white;
+  border-top: 1px solid #d1d5db;
+}
+
+/* EMPTY */
+.chat-empty {
+  margin: auto;
+  color: gray;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .main-chat-wrapper {
+    flex-direction: column;
+  }
+
+  .chat-list,
+  .chat-panel {
+    width: 100%;
+  }
+
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
 `}</style>
     </div>
   );

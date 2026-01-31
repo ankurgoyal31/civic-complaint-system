@@ -3,25 +3,25 @@ const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const multer = require("multer");
 const cors = require("cors");
-// import { configDotenv } from "dotenv";
-const app = express();
+ const app = express();
 app.use(cors()); 
 app.use(express.json()); 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 console.log("ENV VALUE:", process.env.MONGODB_URI);
- const client = new MongoClient(process.env.MONGODB_URI);
-
+let client;
+let db;
+  
 async function startServer() {
   try {
+     client = new MongoClient(process.env.MONGODB_URI, { maxPoolSize: 5,});
     await client.connect();
-    console.log("MongoDB connected");
-
-    const db = client.db("complaint");
+    db = client.db("complaint");
+    console.log("✅ MongoDB connected");
     const User = db.collection("user");
-    const Us = db.collection("Us");
+    const Us = db.collection("Us"); 
     const Ad = db.collection("admin");
-    const msg  = db.collection("msg");
+    const msg  = db.collection("msg"); 
      app.post("/upload", upload.single("image"), async (req, res) => {
       try {
         const file = req.file;
@@ -48,10 +48,10 @@ async function startServer() {
 
         await User.insertOne({ userEmail, userName, name, branch,  complaint,  des,  location,   img,  mobile, status: "Pending",  image: file.buffer.toString("base64"),  noti: [],  uploadedAt: new Date(),});
 
-        res.json({ success: true, inserted: true });
+        res.json({ok: true, inserted: true });
       } catch (err) {
         console.error("UPLOAD ERROR:", err);
-        res.status(500).json({ error: "Server error" });
+        res.json({ok:false});
       }
     }); 
 
@@ -121,22 +121,20 @@ async function startServer() {
 app.post("/chstatus",async(req,res)=>{
   console.log("fuck...",req.body)
   let data = await User.findOne({userEmail:req.body.email,des:req.body.des,mobile:req.body.mob})
-  if(data){
+  if(data){ 
     await User.updateOne({_id:data._id},{$set:{status:req.body.status}});
     await msg.insertOne({name:req.body.name,email:req.body.email,mobile:req.body.mob,complaint:req.body.complaint,des:req.body.des,status:req.body.status === "In Progress"? `👋 Your complaint is now In Progress. Our admin is reviewing it.`: `🥳 Your complaint has been ${req.body.status}.`,complaintId:data._id,uploaded:req.body.date})
     return res.send({ok:true})
   }
-      return res.send({ok:fasle});
+      return res.send({ok:false});
 })
 app.post("/msg",async(req,res)=>{
   try{
 let data = await msg.find({email:req.body.email}).toArray();
  return res.send(data)
-  }catch(err){
-res.status(500).json([]);
-  }
-})
-     app.listen(`${process.env.NEXT_PUBLIC_BACKEND}`|| 5000, () =>
+  }catch(err){ 
+res.status(500).json({ok: false,data: []});}})
+     app.listen(5000, () =>
       console.log(`Server running on ${process.env.NEXT_PUBLIC_BACKEND}`)
     );
    } catch (err) {
@@ -144,4 +142,4 @@ res.status(500).json([]);
   }
 }
 
-startServer(); 
+startServer();  

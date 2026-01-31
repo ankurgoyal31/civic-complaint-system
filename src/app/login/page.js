@@ -1,8 +1,7 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import Nav from "../cp/nav";
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
@@ -31,7 +30,6 @@ const Page = () => {
   }, [status, router]);
 
   if (status === "loading") return null;
-
   return (
     <>
        
@@ -66,8 +64,7 @@ const Page = () => {
               <option value="admin">Admin</option>
               <option value="worker">Worker</option>
             </select>
-
-            {(!e || role === "user") && (
+             {(!e || role === "user") && (
               <>
                 <button
                   onClick={() => signIn("github")}

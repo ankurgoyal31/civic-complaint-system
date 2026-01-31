@@ -1,47 +1,13 @@
 "use client";
 import React from "react";
-import { Button } from "react-bootstrap";
-import Link from "next/link";
+ import Adnav from "../../../adnvav/nav";
 export default function AdminProfile() {
-    const menu = [
-  { icon: '🏠', label: 'Dashboard', href: '/admin' },
-  { icon: '📊', label: 'Analytics', href: '/' },
-  { icon: '📋', label: 'All Complaints', href: '/adcom' },
-  { icon: '🔔', label: 'Report', href: '/report' },
-  // { icon: '📈', label: 'Status', href: '/status' },
-  { icon: '💬', label: 'Notification', href: '/notia' },
-//   { icon: '👷', label: 'Workers', href: '/workers' },
-  { icon: '👤', label: 'Profile', href: '/adp' },
-];
   return (
     <div className="admin-wrapper">
-<div className="premium-sidebar">
-                    <div className="sidebar-header">
-                        <h3>Navigation Menu</h3>
-                        <div className="sidebar-glow"></div>
-                    </div>
-                    
-                       <nav className="sidebar-nav">
-                     
-
-  {menu.map((item, index) => (
-    <Link key={index} href={item.href} className="sidebar-link">
-      <span className="link-icon">{item.icon}</span>
-      <span className="link-text">{item.label}</span>
-      <div className="link-glow"></div>
-    </Link>
-  ))}
-</nav>
-
-                    
-                    <div className="sidebar-footer">
-                        <Button className="premium-signout-sidebar">🚪 Sign Out</Button>
-                    </div>
-                </div>
+                <Adnav/>
 
       <div className="profile-glass">
-        {/* LEFT */}
-        <div className="profile-left">
+         <div className="profile-left">
           <img
             src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             className="avatar"
@@ -55,14 +21,9 @@ export default function AdminProfile() {
             <p><b>Phone:</b> +91 9509518631</p>
           </div>
 
-          {/* <div className="btns">
-            <Button className="edit">✏️ Edit</Button>
-            <Button className="logout">🚪 Logout</Button>
-          </div> */}
         </div>
 
-        {/* RIGHT */}
-        <div className="profile-right">
+         <div className="profile-right">
           <div className="stat">
             <h1>124</h1>
             <p>Total Complaints</p>

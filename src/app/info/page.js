@@ -20,7 +20,8 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Link from 'next/link';
 import { Suspense } from 'react';
 export const dynamic = 'force-dynamic'
-
+import Srtr from '../sidev/srtr';
+import Adnav from '../../../adnvav/nav';
 export default function Page() {
   return (
     <Suspense fallback={<div style={{ padding: 20 }}>Loading...</div>}>
@@ -149,7 +150,7 @@ function InfoContent() {
                     <img className='modal-image' src={`data:image/jpeg;base64,${us?.image}`} alt="Complaint" />
                 </div>
             </div>}
-<div className="premium-sidebar">
+{/* <div className="premium-sidebar">
                     <div className="sidebar-header">
                         <h3>Navigation Menu</h3>
                         <div className="sidebar-glow"></div>
@@ -171,10 +172,10 @@ function InfoContent() {
                     <div className="sidebar-footer">
                         <Button className="premium-signout-sidebar">🚪 Sign Out</Button>
                     </div>
-                </div>
+                </div> */}
 
 
-
+<Adnav/>
              <div className="main-content-wrapper">
                  <div className="user-info-card">
                     <div className="user-header">
