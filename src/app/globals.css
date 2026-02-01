@@ -1531,27 +1531,35 @@ box-shadow: 1px 1px 15px white;
  .bt5:hover{
            background: linear-gradient(180deg, #268756 0%, #2087aa 100%);
  }
- .im{
-  position:absolute;
-  justify-self:self-end;
-    margin-top: -20%;
-    position: fixed;
- }
- .ih{
-  width: 900px;
-  height: 500px;
+ @media (hover: hover) {
+  .bt5:hover {
+    background: linear-gradient(180deg, #268756 0%, #2087aa 100%);
   }
+}
+.bt5:active {
+  background: linear-gradient(180deg, #268756 0%, #2087aa 100%);
+}
+@media (hover: none) {
+  .complaint-card:hover {
+    background: black;
+  }
+}
 
 
+.im {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 9999;   /* 🔥 sabke upar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-
-
-
-
-
-
-
-
+.ih {
+  max-width: 90%;
+  max-height: 90%;
+}
   .chat-button {
           position: fixed;
           bottom: 30px;
