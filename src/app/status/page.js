@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect,useLayoutEffect } from "react";
  import Link from "next/link";
  import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,7 @@ import Srtr from "../sidev/srtr";
    const [fi, set] = useState([]);
    const [f, mn] = useState(null);
    const[l,sl] = useState("");
+   const[image,set_image]  = useState([])
   const fetchUsers = async () => {
       sl("loading your Content...")
     if (session?.user?.email) {
@@ -66,7 +67,7 @@ import Srtr from "../sidev/srtr";
     }
   };
 
-  const filteredComplaints = users.filter((complaint) => {
+     const filteredComplaints = users.filter((complaint) => {
     const matchesFilter = filter === "all" || complaint.status === filter;
     const matchesSearch =
       complaint.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -76,6 +77,12 @@ import Srtr from "../sidev/srtr";
       complaint.userName.toLowerCase().includes(searchTerm.toLowerCase())||complaint.des.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesFilter && matchesSearch;
   });
+ let id = filteredComplaints.map((item)=>item._id)
+let filter_image = image.filter((item)=>id.includes(item._id))
+
+ console.log("id jk kjb jmnm",id)  
+   
+  // console.log(filteredComplaints)
    useEffect(() => {
     fetchUsers();
   }, [session]);
@@ -109,6 +116,25 @@ import Srtr from "../sidev/srtr";
     mn(i);
     st(true);
   }
+  useEffect(() => {
+    if(!filteredComplaints.length || !image.length) return
+let id = filteredComplaints.map((item)=>item._id);
+      let filter_image = image.filter((item)=>id.includes(item._id))
+      console.log("filter iamge ->",filter_image)
+      set_image(filter_image);
+ },[])
+  
+   useEffect(() => {
+         async function get() {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/get_data?email=${session?.user?.email}`);
+      let data = await res.json();
+      console.log("layout",data,filteredComplaints)
+       
+      set_image(data)
+          }
+          get()
+        },[session?.user?.email])
+        // console.log("all",image)
   return (
     <> 
     <div className="display"> 
@@ -271,7 +297,7 @@ import Srtr from "../sidev/srtr";
               </div>
             ))
           )}
-  {t&& <div className='im'><div className='v' onClick={()=>st(!t)}>X</div> <div><img className='ih' src={`data:image/jpeg;base64,${filteredComplaints[f]?.image}`}   alt="" /></div></div>}
+  {t&& <div className='im'><div className='v' onClick={()=>st(!t)}>X</div> <div><img className='ih' src={`data:image/jpeg;base64,${filter_image[f]?.image}`}   alt="" /></div></div>}
         </div>
         <footer className="tracker-footer">
           <p>© 2023 Civic Solutions - Making Cities Better</p>
