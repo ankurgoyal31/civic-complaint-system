@@ -69,6 +69,10 @@ const fetchUsers = async () => {
   }, [item]);
 
    const edit = async (item) => {
+    if(first.location==="" || first.event==="" || first.name==="" ||first.des==="" ||first.time==="" || first.mobile===""){
+    alert("please fill the require field...")
+return;
+    }
   const formData = new FormData();
   formData.append("image", first.image);
   formData.append("userEmail", session.user.email);
