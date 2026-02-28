@@ -85,7 +85,7 @@ return;
   formData.append("complaint", first.time);
   formData.append("mobile", first.mobile);
   formData.append("_id", item);
-              sload("your complaint is sending please wait don't close the page ...")
+              sload("Updating your complaint, please wait...")
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/edit`, {
       method: "POST",
@@ -98,7 +98,7 @@ return;
        sload("something went wrong...")
     }
     if (data.success) {
-      alert("Updated Successfully");
+      alert("Update successful. Please check your status.");
       sload("")
     }
 
