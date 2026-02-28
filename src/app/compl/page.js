@@ -150,9 +150,10 @@ setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.compla
           {/* {session && <div className='s9'><img className='f3' src={session.user.image} alt="" /></div>} */}
           {session && <div className='s0'>welcome, {session.user.name}</div>}
  </div>
-
+ 
  <div className='p1'> 
-            {load!=="" && <><div className='loader_handler'>{load}</div></>}
+  {/* <div className='loader_handler'>your complaint is sending please wait don't close the page ...</div> */}
+     {load!=="" && <><div className='loader_handler'>{load}</div></>}
      <div><input name='name' value={first.name} onChange={hand} type="text" placeholder='ENTER PERSON NAME' /></div>
     <div><input name='event' value={first.event} onChange={hand} type="text" placeholder='ENTER YOUR BRANCH' /></div>
     <div><input name='time' value={first.time} onChange={hand} type="text" placeholder='ENTER COMPLAIAINT' /></div>
