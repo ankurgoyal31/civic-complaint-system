@@ -20,15 +20,15 @@ import Srtr from "../sidev/srtr";
    const[l,sl] = useState("");
    const[image,set_image]  = useState([])
   const fetchUsers = async () => {
-      sl("loading your Content...")
+    sl("loading your Content...")
     if (session?.user?.email) {
       try{
-       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
       const data = await res.json();
       setUsers(data);
       set(data);
       if(data.length==0){
-        sl("No complaints found matching your criteria.");
+      sl("No complaints found matching your criteria.");
       }
       if (data.length !== 0) {
         setStatus(data[0].status);
@@ -80,10 +80,8 @@ import Srtr from "../sidev/srtr";
  let id = filteredComplaints.map((item)=>item._id)
 let filter_image = image.filter((item)=>id.includes(item._id))
 
- console.log("id jk kjb jmnm",id)  
-   
-  // console.log(filteredComplaints)
-   useEffect(() => {
+    
+    useEffect(() => {
     fetchUsers();
   }, [session]);
 
@@ -105,8 +103,8 @@ let filter_image = image.filter((item)=>id.includes(item._id))
     setVisible(!visible);
   };
   const sen =(e,i)=>{
-   const index = fi.findIndex(item => item._id == filteredComplaints[i]?._id && item.name==filteredComplaints[i]?.name && item.branch==filteredComplaints[i]?.branch && item.userEmail == filteredComplaints[i]?.userEmail && item.complaint==filteredComplaints[i]?.complaint &&  item.location == filteredComplaints[i]?.location);
-    router.push(`/compl?data=${encodeURIComponent(index)}`);  
+    console.log(i)
+     router.push(`/compl?data=${encodeURIComponent(i)}`);  
   }
   const copy=(p)=>{
     navigator.clipboard.writeText(p)
@@ -254,7 +252,7 @@ let id = filteredComplaints.map((item)=>item._id);
                     >
                       {getStatusText(complaint.status)}
                </div>
-            {complaint.status==="Pending" && <div onClick={(e)=>sen(e,i)} className="bt"  style={{padding:'5px',width:"70px"}}>Edit</div>}
+            {complaint.status==="Pending" && <div onClick={(e)=>sen(e,complaint._id)} className="bt"  style={{padding:'5px',width:"70px"}}>Edit</div>}
                     </div> 
                 </div>
  
