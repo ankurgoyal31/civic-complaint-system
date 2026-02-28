@@ -8,7 +8,7 @@ import { useState,useEffect } from 'react'
  import Container from 'react-bootstrap/Container';
  import { useSession } from 'next-auth/react';
  import Srtr from '../sidev/srtr'
-export default function Page() {
+ export default function Page() {
   return (
     <Suspense fallback={<div style={{ color: 'white', padding: 20 }}>Loading...</div>}>
       <ComplContent />
@@ -31,6 +31,11 @@ function ComplContent() {
   const hand = (e)=>{
     setfirst({...first,[e.target.name]:e.target.value});
   }
+  // useEffect(() => {
+  //   if(session?.user?.email && item !==null){
+  //     gp(session.user?.email , session.user?.name)
+  //   }
+  // }, [session])
     const sho = () => {
      x(true);
   };
@@ -51,7 +56,7 @@ const fetchUsers = async () => {
  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/update?edit=${item}`);
    const data = await res.json();
    console.log("data is ->",data.data)
-   if(data.data){    
+   if(data.data){
     setfirst({name:data?.data.name,time:data?.data.complaint,event:data?.data.branch,location:data?.data.location,mobile:data?.data.mobile,des:data?.data.des})
    }
     setUsers(data.data);
@@ -63,10 +68,39 @@ const fetchUsers = async () => {
     fetchUsers();
   }, [item]);
 
+   const edit = async (item) => {
+  const formData = new FormData();
+  formData.append("image", first.image);
+  formData.append("userEmail", session.user.email);
+  formData.append("userName", session.user.name);
+  formData.append("location", first.location);
+  formData.append("branch", first.event);
+  formData.append("name", first.name);
+  formData.append("des", first.des);
+  formData.append("complaint", first.time);
+  formData.append("mobile", first.mobile);
+  formData.append("_id", item);
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/edit`, {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+    console.log("EDIT RESPONSE ->", data);
+
+    if (data.success) {
+      alert("Updated Successfully");
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+};
   const cre = async (v) => {
 sload("")
      if(first.location=="" || first.event=="" || first.name=="" ||first.des=="" ||first.time=="" || first.mobile=="" ){
-sload("filled the requres field..");
+alert("please fill the require field...")
 return;
     }
         sload("your complaint is sending please wait don't close the page ...")
@@ -107,6 +141,13 @@ setfirst({name:"",event: "",time:"",image:"",location:"",mobile:"",des: "",color
   }
 };
 
+//   useEffect(() => {
+//     if(item  && users){
+//   console.log("-> ",ind)
+// setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.complaint,image:users[ind]?.image,location:users[ind]?.location,mobile:users[ind]?.mobile,des:users[ind]?.des,color:users[ind]?.color})
+//     }
+//   }, [users,item])
+
   console.log("fuck->>",users)
 
 
@@ -136,7 +177,7 @@ setfirst({name:"",event: "",time:"",image:"",location:"",mobile:"",des: "",color
 <div><textarea name='des' value={first.des} onChange={hand} placeholder='ABOUT THE COMPLAINT'></textarea></div>
  {!session&&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}><Link className='free' href={"/login"}> SignIn to create </Link></div> }
 {!item && session &&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}> CREATE </div>}
-{item && <div onClick={()=>cre(users[ind]?._id)} className='p0' style={{backgroundColor:'red'}}>EDIT </div>}
+{item && <div onClick={()=>edit(item)} className='p0' style={{backgroundColor:'red'}}>EDIT </div>}
 </div>
 </div>
  </div>
