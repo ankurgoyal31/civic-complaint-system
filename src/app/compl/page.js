@@ -69,6 +69,7 @@ const fetchUsers = async () => {
   }, [item]);
 
    const edit = async (item) => {
+ sload("")
     if(first.location==="" || first.event==="" || first.name==="" ||first.des==="" ||first.time==="" || first.mobile===""){
     alert("please fill the require field...")
 return;
@@ -84,6 +85,7 @@ return;
   formData.append("complaint", first.time);
   formData.append("mobile", first.mobile);
   formData.append("_id", item);
+              sload("your complaint is sending please wait don't close the page ...")
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/edit`, {
       method: "POST",
@@ -92,9 +94,12 @@ return;
 
     const data = await res.json();
     console.log("EDIT RESPONSE ->", data);
-
+  if (!data.success) {
+       sload("something went wrong...")
+    }
     if (data.success) {
       alert("Updated Successfully");
+      sload("")
     }
 
   } catch (err) {
