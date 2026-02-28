@@ -4,18 +4,10 @@ import React from 'react'
 import { Suspense } from 'react'
 import { useState,useEffect } from 'react'
  import Link from 'next/link'
-import { useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { Itim } from 'next/font/google'
-import { Card, Button, Row, Col } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { signIn, signOut, useSession } from 'next-auth/react';
-// import Link from 'next/link'
-import Srtr from '../sidev/srtr'
+ import { useSearchParams } from 'next/navigation'
+ import Container from 'react-bootstrap/Container';
+ import { useSession } from 'next-auth/react';
+ import Srtr from '../sidev/srtr'
 export default function Page() {
   return (
     <Suspense fallback={<div style={{ color: 'white', padding: 20 }}>Loading...</div>}>
@@ -28,8 +20,7 @@ function ComplContent() {
       const searchParams = useSearchParams();
          const [scrolled, setScrolled] = useState(false);
      
-  // const ind = parseInt(ite);
-  const{data:session, status} = useSession()
+   const{data:session, status} = useSession()
   const[load,sload]  = useState("");
    const [first, setfirst] = useState({name:"",event:"",time:"",image:null,location:"",mobile:"",des:"",color:""})
   const[m,n] = useState("")
@@ -40,28 +31,12 @@ function ComplContent() {
   const hand = (e)=>{
     setfirst({...first,[e.target.name]:e.target.value});
   }
-  useEffect(() => {
-    if(session?.user?.email && item !==null){
-      gp(session.user?.email , session.user?.name)
-    }
-  }, [session])
-  const gp = async(p,s)=>{
-// let o = await gt(p,s);
-// console.log(o[item].name)
-      // setfirst({name:o[item].name,event:o[item].event,time:o[item].time,image:o[item].image,location:o[item].location,des:o[item].des,color:o[item].color})
-  //  n(o[item]._id);  
-     }
     const sho = () => {
      x(true);
   };
   const handleFile = (e) => {
     setfirst({ ...first, image: e.target.files[0] });
   }
-// console.log(first)
-  //  const ht = ()=>{
-  //   x(false)
-  // }
-        //  <div><b>ComplaintId:</b> {item.complaintId}</div>
 const menu = [
   { icon: '🏠', label: 'Dashboard', href: '/' },
   { icon: '📊', label: 'Message', href: '/ana' },
@@ -70,17 +45,23 @@ const menu = [
   { icon: '📈', label: 'Status', href: '/status' },
   { icon: '👤', label: 'Profile', href: '/profile' },
 ];
-  const fetchUsers = async () => {
- if (status === "authenticated" && session?.user?.email) {
- const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`); 
+const fetchUsers = async () => {
+    console.log("item",item)
+  if ( item) {
+ const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/update?edit=${item}`);
    const data = await res.json();
-    setUsers(data);
+   console.log("data is ->",data.data)
+   if(data.data){
+    setfirst({name:data?.data.name,event:data?.data.branch,location:data?.data.location,mobile:data?.data.mobile,des:data?.data.des})
+   }
+    setUsers(data.data);
+    return
       }
   };
  useEffect(() => {
+      if(!item) return
     fetchUsers();
-  }, [session?.user?.email]);
-
+  }, [item]);
 
   const cre = async (v) => {
 sload("")
@@ -126,12 +107,12 @@ setfirst({name:"",event: "",time:"",image:"",location:"",mobile:"",des: "",color
   }
 };
 
-  useEffect(() => {
-    if(item  && users){
-  console.log("-> ",ind)
-setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.complaint,image:users[ind]?.image,location:users[ind]?.location,mobile:users[ind]?.mobile,des:users[ind]?.des,color:users[ind]?.color})
-    }
-  }, [users,item])
+//   useEffect(() => {
+//     if(item  && users){
+//   console.log("-> ",ind)
+// setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.complaint,image:users[ind]?.image,location:users[ind]?.location,mobile:users[ind]?.mobile,des:users[ind]?.des,color:users[ind]?.color})
+//     }
+//   }, [users,item])
 
   console.log("fuck->>",users)
 
@@ -147,13 +128,11 @@ setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.compla
 
      <div  className='x1'> 
       <div className='x2'> 
-          {/* {session && <div className='s9'><img className='f3' src={session.user.image} alt="" /></div>} */}
-          {session && <div className='s0'>welcome, {session.user.name}</div>}
+           {session && <div className='s0'>welcome, {session.user.name}</div>}
  </div>
  
  <div className='p1'> 
-  {/* <div className='loader_handler'>your complaint is sending please wait don't close the page ...</div> */}
-     {load!=="" && <><div className='loader_handler'>{load}</div></>}
+      {load!=="" && <><div className='loader_handler'>{load}</div></>}
      <div><input name='name' value={first.name} onChange={hand} type="text" placeholder='ENTER PERSON NAME' /></div>
     <div><input name='event' value={first.event} onChange={hand} type="text" placeholder='ENTER YOUR BRANCH' /></div>
     <div><input name='time' value={first.time} onChange={hand} type="text" placeholder='ENTER COMPLAIAINT' /></div>
@@ -162,10 +141,9 @@ setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.compla
         <div><input name='mobile' value={first.mobile} onChange={hand} type="text" placeholder='ENTER  MOBILE' /></div>
 
 <div><textarea name='des' value={first.des} onChange={hand} placeholder='ABOUT THE COMPLAINT'></textarea></div>
- {/* <div className='p0' onClick={cre}><Link href='/dash/' style={{textDecoration:'none'}} >CREATE</Link> </div> */}
-{!session&&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}><Link className='free' href={"/login"}> SignIn to create </Link></div> }
+ {!session&&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}><Link className='free' href={"/login"}> SignIn to create </Link></div> }
 {!item && session &&<div className='p0' style={{backgroundColor:'red'}} onClick={cre}> CREATE </div>}
-{item && <div onClick={()=>cre(users[ind]?._id)} className='p0' style={{backgroundColor:'red'}}>{users[ind]?._id} EDIT </div>}
+{item && <div onClick={()=>cre(users[ind]?._id)} className='p0' style={{backgroundColor:'red'}}>EDIT </div>}
 </div>
 </div>
  </div>
