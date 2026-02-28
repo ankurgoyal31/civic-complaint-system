@@ -51,8 +51,8 @@ const fetchUsers = async () => {
  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/update?edit=${item}`);
    const data = await res.json();
    console.log("data is ->",data.data)
-   if(data.data){
-    setfirst({name:data?.data.name,event:data?.data.branch,location:data?.data.location,mobile:data?.data.mobile,des:data?.data.des})
+   if(data.data){    
+    setfirst({name:data?.data.name,time:data?.data.complaint,event:data?.data.branch,location:data?.data.location,mobile:data?.data.mobile,des:data?.data.des})
    }
     setUsers(data.data);
     return
@@ -106,13 +106,6 @@ setfirst({name:"",event: "",time:"",image:"",location:"",mobile:"",des: "",color
     sload("please Check Your internet connection....")
   }
 };
-
-//   useEffect(() => {
-//     if(item  && users){
-//   console.log("-> ",ind)
-// setfirst({name:users[ind]?.name,event:users[ind]?.branch,time:users[ind]?.complaint,image:users[ind]?.image,location:users[ind]?.location,mobile:users[ind]?.mobile,des:users[ind]?.des,color:users[ind]?.color})
-//     }
-//   }, [users,item])
 
   console.log("fuck->>",users)
 
