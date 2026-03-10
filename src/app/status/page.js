@@ -1,9 +1,7 @@
 "use client"
 import React, { useState,useEffect,useLayoutEffect } from "react";
- import Link from "next/link";
- import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Srtr from "../sidev/srtr";
  const ComplaintTracker = () => {
     const router = useRouter();
@@ -74,7 +72,7 @@ import Srtr from "../sidev/srtr";
       complaint.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
       complaint.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       complaint.branch.toLowerCase().includes(searchTerm.toLowerCase())||complaint.complaint.toLowerCase().includes(searchTerm.toLowerCase())||
-      complaint.userName.toLowerCase().includes(searchTerm.toLowerCase())||complaint.des.toLowerCase().includes(searchTerm.toLowerCase())
+      complaint.des.toLowerCase().includes(searchTerm.toLowerCase()) ||       complaint._id.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesFilter && matchesSearch;
   });
  let id = filteredComplaints.map((item)=>item._id)
@@ -103,8 +101,7 @@ let filter_image = image.filter((item)=>id.includes(item._id))
     setVisible(!visible);
   };
   const sen =(e,i)=>{
-    console.log(i)
-     router.push(`/compl?data=${encodeURIComponent(i)}`);  
+      router.push(`/compl?data=${encodeURIComponent(i)}`);  
   }
   const copy=(p)=>{
     navigator.clipboard.writeText(p)
@@ -118,22 +115,19 @@ let filter_image = image.filter((item)=>id.includes(item._id))
     if(!filteredComplaints.length || !image.length) return
 let id = filteredComplaints.map((item)=>item._id);
       let filter_image = image.filter((item)=>id.includes(item._id))
-      console.log("filter iamge ->",filter_image)
-      set_image(filter_image);
+       set_image(filter_image);
  },[])
   
    useEffect(() => {
          async function get() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/get_data?email=${session?.user?.email}`);
       let data = await res.json();
-      console.log("layout",data,filteredComplaints)
-       
+        
       set_image(data)
           }
           get()
         },[session?.user?.email])
-        // console.log("all",image)
-  return (
+   return (
     <> 
     <div className="display"> 
     <div >
@@ -255,10 +249,9 @@ let id = filteredComplaints.map((item)=>item._id);
             {complaint.status==="Pending" && <div onClick={(e)=>sen(e,complaint._id)} className="bt"  style={{padding:'5px',width:"70px"}}>Edit</div>}
                     </div> 
                 </div>
- 
-                <h3 className="complaint-title">{complaint.des}</h3>
-                <p className="complaint-description">{complaint.des}</p>
-
+                <h3 style={{color:"#667eea"}}>{complaint.name}</h3>
+                <h3 style={{color:"white"}} className="complaint-title">{complaint.des}</h3>
+                
                 <div className="complaint-meta">
                   <div className="meta-item">
                   </div>
