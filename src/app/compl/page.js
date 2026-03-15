@@ -53,7 +53,7 @@ const menu = [
 const fetchUsers = async () => {
     console.log("item",item)
   if ( item) {
- const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/update?edit=${item}`);
+ const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/update?edit=${item}`);
    const data = await res.json();
    console.log("data is ->",data.data)
    if(data.data){
@@ -87,7 +87,7 @@ return;
   formData.append("_id", item);
               sload("Updating your complaint, please wait...")
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/edit`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/edit`, {
       method: "POST",
       body: formData
     });
@@ -130,7 +130,7 @@ return;
 console.log("fuck->>",users)
        }
        try{
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/upload`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/upload`, {
     method: "POST",
     body: formData
   });
