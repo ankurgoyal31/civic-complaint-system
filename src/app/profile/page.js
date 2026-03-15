@@ -26,7 +26,7 @@ const menu = [
 
  async function fet() {
   sl("loading your data....")
-              const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
+              const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/users?email=${session?.user?.email}`);
 const data = await res.json();
 if(!data.length){
   sl("Not found....")
