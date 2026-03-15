@@ -30,9 +30,9 @@ const [openSidebar, setOpenSidebar] = useState(false);
   const fetchUsers = async () => {
     try {
       const [admRes, useRes,am] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`),
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/use`),
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/am`),
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/adm`),
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/use`),
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/am`),
       ]);
       const admData = await admRes.json();
       const useData = await useRes.json();
@@ -137,7 +137,7 @@ console.log(selectedMessage.id,session?.user?.email)
    formData.append("_id",selectedMessage.id);
   formData.append("noti",replyText);
 
-   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/load`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/load`, {
     method: "POST",
     body: formData
   });
@@ -149,7 +149,7 @@ console.log(selectedMessage.id)
    form.append("id",selectedMessage.id);
   form.append("resp",replyText);
   form.append("branch","sarmathura");
-  const re = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/admin`, {
+  const re = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/admin`, {
     method: "POST",
     body: form
   });
