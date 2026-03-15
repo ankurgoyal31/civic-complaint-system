@@ -47,7 +47,7 @@ function InfoContent() {
     const [t, se] = useState(false);
 
     const fetchUsers = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/adm`);
         const data = await res.json();
         console.log(data);
         const sorted = data.sort(  (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
@@ -134,7 +134,7 @@ function InfoContent() {
     const handleSelect = async(value) => {
         console.log("called..",value)
         setStatus(value);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/chstatus`,{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/chstatus`,{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({email:us?.userEmail,name:us.name,des:us?.des,mob:us?.mobile,status:value,complaint:us?.compalaint,date:new Date(us?.uploadedAt).toLocaleString()})
