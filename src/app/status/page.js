@@ -21,7 +21,7 @@ import Srtr from "../sidev/srtr";
     sl("loading your Content...")
     if (session?.user?.email) {
       try{
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/users?email=${session?.user?.email}`);
       const data = await res.json();
       setUsers(data);
       set(data);
@@ -120,7 +120,7 @@ let id = filteredComplaints.map((item)=>item._id);
   
    useEffect(() => {
          async function get() {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/get_data?email=${session?.user?.email}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/get_data?email=${session?.user?.email}`);
       let data = await res.json();
         
       set_image(data)
