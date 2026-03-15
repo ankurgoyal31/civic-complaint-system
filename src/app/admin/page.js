@@ -29,7 +29,7 @@ const Page = () => {
   const fetchUsers = async () => {
     try{
       sl("loading your content....")
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/adm`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/adm`);
     const data = await res.json();
     console.log(data);
     setUsers(data)
