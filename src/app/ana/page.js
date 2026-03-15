@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
     try {
       ses("Loading....")
         console.log(session?.user?.email);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/msg`,{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/msg`,{
           method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({email:session?.user?.email})  
