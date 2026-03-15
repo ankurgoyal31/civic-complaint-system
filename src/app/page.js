@@ -1,4 +1,3 @@
-"use client"
 import React from 'react'
  import { useEffect,useState } from 'react'
 import Carousel from 'react-bootstrap/Carousel';
@@ -79,7 +78,7 @@ const menu = [
         if (session?.user?.email) {
             console.log("Fetching users...")
             console.log(session?.user?.email)
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/users?email=${session?.user?.email}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/complaint/users?email=${session?.user?.email}`);
             const data = await res.json();
             if(!data.length){ 
                 ssh("Not found Any Report....")
